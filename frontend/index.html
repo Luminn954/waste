@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartWaste — Sistem Manajemen Sampah</title>
+  <meta name="description" content="SmartWaste - Aplikasi manajemen sampah modern. Pantau sampah, petugas, kendaraan, dan TPA secara real-time."/>
+  <meta name="theme-color" content="#10b981"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ███ TOPNAV ███ -->
+<nav class="topnav">
+  <button class="nav-toggle" id="nav-toggle"><i class="fa-solid fa-bars"></i></button>
+
+  <a class="nav-brand" href="#">
+    <div class="nav-brand-icon"><i class="fa-solid fa-recycle"></i></div>
+    <div>
+      <span class="nav-brand-name">SmartWaste</span>
+      <span class="nav-brand-ver">v2.0</span>
+    </div>
+  </a>
+
+  <div class="nav-links" id="nav-links">
+    <a class="nav-link active" data-page="dashboard" href="#"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+    <a class="nav-link" data-page="sampah"    href="#"><i class="fa-solid fa-trash-can"></i><span>Sampah</span></a>
+    <a class="nav-link" data-page="petugas"   href="#"><i class="fa-solid fa-users"></i><span>Petugas</span></a>
+    <a class="nav-link" data-page="kendaraan" href="#"><i class="fa-solid fa-truck"></i><span>Kendaraan</span></a>
+    <a class="nav-link" data-page="tpa"       href="#"><i class="fa-solid fa-industry"></i><span>TPA</span></a>
+    <a class="nav-link" data-page="laporan"   href="#"><i class="fa-solid fa-file-lines"></i><span>Laporan</span></a>
+    <a class="nav-link" data-page="analytics" href="#"><i class="fa-solid fa-chart-area"></i><span>Statistik</span></a>
+  </div>
+
+  <div class="nav-right">
+    <div class="nav-sosmed">
+      <a href="https://instagram.com/lutfi.sw9"  target="_blank" class="nav-sosmed-btn ig" title="@lutfi.sw9"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://tiktok.com/@cyrosss7"     target="_blank" class="nav-sosmed-btn tt" title="@cyrosss7"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://wa.me/6283853930368"       target="_blank" class="nav-sosmed-btn wa" title="083853930368"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+
+    <!-- Kalender interaktif -->
+    <div class="cal-wrap" id="cal-wrap">
+      <button class="nav-date" id="cal-btn" title="Buka Kalender">
+        <i class="fa-regular fa-calendar"></i>
+        <span id="current-date"></span>
+        <i class="fa-solid fa-chevron-down" style="font-size:.6rem;margin-left:2px"></i>
+      </button>
+      <!-- Calendar dropdown -->
+      <div class="cal-panel" id="cal-panel">
+        <div class="cal-header">
+          <button class="cal-nav" id="cal-prev"><i class="fa-solid fa-chevron-left"></i></button>
+          <span class="cal-month-label" id="cal-month-label"></span>
+          <button class="cal-nav" id="cal-next"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="cal-days-hd">
+          <span>Min</span><span>Sen</span><span>Sel</span>
+          <span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-footer">
+          <button class="cal-today-btn" id="cal-today">Hari ini</button>
+          <span class="cal-hint">Klik tanggal → isi form laporan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark mode toggle -->
+    <button class="dark-toggle" id="dark-toggle" title="Toggle Dark Mode">
+      <i class="fa-solid fa-moon" id="dark-icon"></i>
+    </button>
+
+    <!-- Notifikasi bell -->
+    <div style="position:relative">
+      <button class="notif-btn" id="notif-btn" title="Notifikasi">
+        <i class="fa-regular fa-bell"></i>
+        <span class="notif-dot" id="notif-dot"></span>
+      </button>
+      <div class="notif-panel" id="notif-panel">
+        <div class="notif-panel-hd">
+          <span>Notifikasi</span>
+          <button onclick="document.getElementById('notif-panel').classList.remove('open')">Tutup</button>
+        </div>
+        <div id="notif-list">
+          <div class="notif-item"><div class="notif-icon success"><i class="fa-solid fa-spinner fa-spin"></i></div><span class="notif-text">Memuat...</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile dropdown -->
+    <div class="profile-wrap" id="profile-wrap">
+      <button class="nav-user" id="profile-btn" title="Profil">
+        <div class="nav-user-ava">L</div>
+        <span class="nav-user-name">Lutfi SW</span>
+        <i class="fa-solid fa-chevron-down" style="font-size:.6rem;margin-left:2px;color:var(--tx3)"></i>
+      </button>
+      <!-- Profile panel -->
+      <div class="profile-panel" id="profile-panel">
+        <!-- Header profil -->
+        <div class="pp-header">
+          <div class="pp-ava">L</div>
+          <div class="pp-info">
+            <span class="pp-name">Lutfi Sakhi Winardi</span>
+            <span class="pp-role">Admin SmartWaste</span>
+          </div>
+        </div>
+        <!-- Sosmed -->
+        <div class="pp-sosmed">
+          <a href="https://instagram.com/lutfi.sw9" target="_blank" class="pp-sosmed-item ig">
+            <i class="fa-brands fa-instagram"></i>
+            <span>@lutfi.sw9</span>
+          </a>
+          <a href="https://tiktok.com/@cyrosss7" target="_blank" class="pp-sosmed-item tt">
+            <i class="fa-brands fa-tiktok"></i>
+            <span>@cyrosss7</span>
+          </a>
+          <a href="https://wa.me/6283853930368" target="_blank" class="pp-sosmed-item wa">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span>083853930368</span>
+          </a>
+        </div>
+        <div class="pp-divider"></div>
+        <!-- Shortcut navigasi -->
+        <div class="pp-section-label">Navigasi Cepat</div>
+        <div class="pp-shortcuts">
+          <button class="pp-shortcut" data-page="dashboard"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></button>
+          <button class="pp-shortcut" data-page="sampah"><i class="fa-solid fa-trash-can"></i><span>Sampah</span></button>
+          <button class="pp-shortcut" data-page="petugas"><i class="fa-solid fa-users"></i><span>Petugas</span></button>
+          <button class="pp-shortcut" data-page="kendaraan"><i class="fa-solid fa-truck"></i><span>Kendaraan</span></button>
+          <button class="pp-shortcut" data-page="tpa"><i class="fa-solid fa-industry"></i><span>TPA</span></button>
+          <button class="pp-shortcut" data-page="laporan"><i class="fa-solid fa-file-lines"></i><span>Laporan</span></button>
+        </div>
+        <div class="pp-divider"></div>
+        <!-- Info app -->
+        <div class="pp-footer">
+          <i class="fa-solid fa-recycle" style="color:var(--gr1)"></i>
+          <span>SmartWaste v2.0 — Sistem Manajemen Sampah</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ███ MAIN ███ -->
+<main class="main">
+
+  <!-- ── DASHBOARD ── -->
+  <section id="page-dashboard" class="page active">
+
+    <div class="db-hero">
+      <div class="db-hero-text">
+        <div class="db-hero-chip"><i class="fa-solid fa-circle-check"></i> Sistem Berjalan Normal</div>
+        <h2>Selamat Datang,<br/><em>SmartWaste</em> Dashboard</h2>
+        <p>Pantau aktivitas pengelolaan sampah secara real-time. Data selalu sinkron dengan backend.</p>
+        <div class="db-hero-tags">
+          <span><i class="fa-solid fa-bolt"></i> Real-time</span>
+          <span><i class="fa-solid fa-shield-halved"></i> Aman</span>
+          <span><i class="fa-solid fa-leaf"></i> Eco-friendly</span>
+          <span><i class="fa-solid fa-moon"></i> Dark Mode</span>
+        </div>
+      </div>
+      <div class="db-hero-visual">
+        <div class="db-hero-icon"><i class="fa-solid fa-recycle"></i></div>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="stat-grid">
+      <div class="sc c1 sc-clickable" data-goto="sampah">
+        <div class="sc-top"><div class="sc-icon"><i class="fa-solid fa-trash-can"></i></div><span class="sc-badge">Total</span></div>
+        <div class="sc-num" id="dash-total-sampah">–</div>
+        <div class="sc-lbl">Total Sampah</div>
+        <div class="sc-bar"><div class="sc-bar-fill" style="width:100%"></div></div>
+        <div class="sc-hint"><i class="fa-solid fa-arrow-right"></i> Lihat Sampah</div>
+      </div>
+      <div class="sc c2 sc-clickable" data-goto="sampah">
+        <div class="sc-top"><div class="sc-icon"><i class="fa-solid fa-clock"></i></div><span class="sc-badge warn">Pending</span></div>
+        <div class="sc-num" id="dash-belum">–</div>
+        <div class="sc-lbl">Belum Diambil</div>
+        <div class="sc-bar"><div class="sc-bar-fill" id="bar-belum" style="width:0%"></div></div>
+        <div class="sc-hint"><i class="fa-solid fa-arrow-right"></i> Lihat Sampah</div>
+      </div>
+      <div class="sc c3 sc-clickable" data-goto="sampah">
+        <div class="sc-top"><div class="sc-icon"><i class="fa-solid fa-circle-check"></i></div><span class="sc-badge ok">Selesai</span></div>
+        <div class="sc-num" id="dash-sudah">–</div>
+        <div class="sc-lbl">Sudah Diambil</div>
+        <div class="sc-bar"><div class="sc-bar-fill" id="bar-sudah" style="width:0%"></div></div>
+        <div class="sc-hint"><i class="fa-solid fa-arrow-right"></i> Lihat Sampah</div>
+      </div>
+      <div class="sc c4 wide sc-clickable" data-goto="sampah">
+        <div class="sc-top"><div class="sc-icon"><i class="fa-solid fa-weight-hanging"></i></div><span class="sc-badge">Total Berat</span></div>
+        <div class="sc-num" id="dash-berat">–</div>
+        <div class="sc-lbl">Kilogram Diangkut</div>
+        <div class="sc-bar"><div class="sc-bar-fill" style="width:60%"></div></div>
+        <div class="sc-hint"><i class="fa-solid fa-arrow-right"></i> Lihat Sampah</div>
+      </div>
+      <div class="sc c5 sc-clickable" data-goto="petugas">
+        <div class="sc-top"><div class="sc-icon"><i class="fa-solid fa-users"></i></div><span class="sc-badge ok">Aktif</span></div>
+        <div class="sc-num" id="dash-petugas">–</div>
+        <div class="sc-lbl">Petugas Aktif</div>
+        <div class="sc-bar"><div class="sc-bar-fill" id="bar-petugas" style="width:0%"></div></div>
+        <div class="sc-hint"><i class="fa-solid fa-arrow-right"></i> Lihat Petugas</div>
+      </div>
+      <div class="sc c6 sc-clickable" data-goto="kendaraan">
+        <div class="sc-top"><div class="sc-icon"><i class="fa-solid fa-wrench"></i></div><span class="sc-badge err">Servis</span></div>
+        <div class="sc-num" id="dash-servis">–</div>
+        <div class="sc-lbl">Kendaraan Servis</div>
+        <div class="sc-bar"><div class="sc-bar-fill" id="bar-servis" style="width:0%"></div></div>
+        <div class="sc-hint"><i class="fa-solid fa-arrow-right"></i> Lihat Kendaraan</div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-grid">
+      <!-- Donut: distribusi jenis sampah -->
+      <div class="chart-box">
+        <div class="chart-box-hd">
+          <span class="chart-box-title"><i class="fa-solid fa-chart-pie"></i> Jenis Sampah</span>
+        </div>
+        <div class="chart-box-body">
+          <div class="donut-wrap">
+            <svg class="donut-svg" width="90" height="90" viewBox="0 0 90 90" id="donut-svg">
+              <circle cx="45" cy="45" r="35" fill="none" stroke="#e2e8f0" stroke-width="12"/>
+              <circle id="donut-organik"   cx="45" cy="45" r="35" fill="none" stroke="#10b981" stroke-width="12" stroke-dasharray="0 220" stroke-dashoffset="55" style="transition:stroke-dasharray .7s ease"/>
+              <circle id="donut-anorganik" cx="45" cy="45" r="35" fill="none" stroke="#0ea5e9" stroke-width="12" stroke-dasharray="0 220" stroke-dashoffset="55" style="transition:stroke-dasharray .7s ease"/>
+              <circle id="donut-b3"        cx="45" cy="45" r="35" fill="none" stroke="#ef4444" stroke-width="12" stroke-dasharray="0 220" stroke-dashoffset="55" style="transition:stroke-dasharray .7s ease"/>
+            </svg>
+            <div class="donut-legend">
+              <div class="donut-item"><span class="donut-dot" style="background:#10b981"></span> Organik <span class="donut-val" id="chart-organik">0</span></div>
+              <div class="donut-item"><span class="donut-dot" style="background:#0ea5e9"></span> Anorganik <span class="donut-val" id="chart-anorganik">0</span></div>
+              <div class="donut-item"><span class="donut-dot" style="background:#ef4444"></span> B3 <span class="donut-val" id="chart-b3">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar: berat per jenis -->
+      <div class="chart-box">
+        <div class="chart-box-hd">
+          <span class="chart-box-title"><i class="fa-solid fa-chart-bar"></i> Berat Per Jenis (kg)</span>
+        </div>
+        <div class="chart-box-body">
+          <div class="bar-chart">
+            <div class="bc-item">
+              <div class="bc-label"><span>Organik</span><b id="berat-organik">0</b></div>
+              <div class="bc-track"><div class="bc-fill" id="bbar-organik" style="width:0%;background:linear-gradient(90deg,#10b981,#059669)"></div></div>
+            </div>
+            <div class="bc-item">
+              <div class="bc-label"><span>Anorganik</span><b id="berat-anorganik">0</b></div>
+              <div class="bc-track"><div class="bc-fill" id="bbar-anorganik" style="width:0%;background:linear-gradient(90deg,#0ea5e9,#0284c7)"></div></div>
+            </div>
+            <div class="bc-item">
+              <div class="bc-label"><span>B3</span><b id="berat-b3">0</b></div>
+              <div class="bc-track"><div class="bc-fill" id="bbar-b3" style="width:0%;background:linear-gradient(90deg,#ef4444,#dc2626)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini stats -->
+      <div class="chart-box">
+        <div class="chart-box-hd">
+          <span class="chart-box-title"><i class="fa-solid fa-signal"></i> Status Sistem</span>
+        </div>
+        <div class="chart-box-body">
+          <div class="mini-stats">
+            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-server" style="color:var(--gr1)"></i> Backend API</div><span class="ms-val" style="color:var(--gr1)">Online</span></div>
+            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-database" style="color:var(--te1)"></i> Database</div><span class="ms-val" style="color:var(--te1)">Terhubung</span></div>
+            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-trash-can" style="color:var(--tx2)"></i> Sampah Diambil</div><span class="ms-val" id="pct-sampah">0%</span></div>
+            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-users" style="color:var(--tx2)"></i> Petugas Aktif</div><span class="ms-val" id="pct-petugas-d">0%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info panels -->
+    <div class="info-grid">
+      <div class="ip">
+        <div class="ip-hd"><i class="fa-solid fa-compass"></i><span>Panduan Cepat</span></div>
+        <div class="ip-bd">
+          <ul class="guide">
+            <li><span class="gdot b"></span><div><b>Sampah</b> — tambah, edit, filter, dan export data sampah</div></li>
+            <li><span class="gdot g"></span><div><b>Petugas</b> — daftarkan petugas dan atur zona tugasnya</div></li>
+            <li><span class="gdot y"></span><div><b>Kendaraan</b> — pantau muatan dan bongkar di TPA</div></li>
+            <li><span class="gdot r"></span><div><b>TPA</b> — monitor kapasitas, kosongkan saat hampir penuh</div></li>
+            <li><span class="gdot pu"></span><div><b>Laporan</b> — rekap harian + export CSV</div></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ip">
+        <div class="ip-hd"><i class="fa-solid fa-location-dot"></i><span>Top Lokasi Sampah</span></div>
+        <div class="ip-bd">
+          <div class="bar-chart" id="top-lokasi-chart">
+            <div style="text-align:center;padding:20px;color:var(--tx3);font-size:.8rem"><i class="fa-solid fa-spinner fa-spin"></i> Memuat...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Preview Statistik Harian (mini chart) ── -->
+    <div class="db-stat-preview sc-clickable" data-goto="analytics" id="db-stat-preview">
+      <div class="dsp-left">
+        <div class="dsp-hd">
+          <span class="rt-badge" style="font-size:.68rem;padding:3px 10px">
+            <span class="rt-dot"></span> Live
+          </span>
+          <h3>Statistik Sampah 7 Hari Terakhir</h3>
+          <p>Klik untuk lihat analitik lengkap</p>
+        </div>
+        <div class="dsp-kpi-row">
+          <div class="dsp-kpi">
+            <span class="dsp-kpi-lbl">Minggu Ini</span>
+            <span class="dsp-kpi-val" id="dsp-total">–</span>
+          </div>
+          <div class="dsp-kpi">
+            <span class="dsp-kpi-lbl">Rata-rata/Hari</span>
+            <span class="dsp-kpi-val" id="dsp-avg">–</span>
+          </div>
+          <div class="dsp-kpi">
+            <span class="dsp-kpi-lbl">Total Berat</span>
+            <span class="dsp-kpi-val" id="dsp-berat">–</span>
+          </div>
+          <div class="dsp-kpi">
+            <span class="dsp-kpi-lbl">Hari Terbanyak</span>
+            <span class="dsp-kpi-val" id="dsp-peak">–</span>
+          </div>
+        </div>
+      </div>
+      <div class="dsp-right">
+        <canvas id="mini-chart" class="mini-chart-canvas"></canvas>
+      </div>
+      <div class="dsp-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    </div>
+
+    <!-- ── Quick Action Panel ── -->
+    <div class="qa-panel">
+      <div class="qa-panel-hd">
+        <div class="qa-panel-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div>
+          <span class="qa-panel-title">Aksi yang Diperlukan</span>
+          <span class="qa-panel-sub">Tindakan prioritas berdasarkan kondisi sistem saat ini</span>
+        </div>
+        <button class="qa-refresh" onclick="loadQuickAction()" title="Refresh">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+      <div id="quick-action-panel">
+        <div class="qa-loading">
+          <i class="fa-solid fa-spinner fa-spin"></i> Memeriksa kondisi sistem...
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── SAMPAH ── -->
+  <section id="page-sampah" class="page">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Daftar Sampah</h2>
+        <p>Kelola, filter, edit, dan export data sampah</p>
+      </div>
+      <div class="page-hdr-right">
+        <!-- Search -->
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-sampah" placeholder="Cari lokasi..."/>
+        </div>
+        <!-- Filter jenis -->
+        <select class="filter-select" id="filter-sampah-jenis">
+          <option value="">Semua Jenis</option>
+          <option value="Organik">Organik</option>
+          <option value="Anorganik">Anorganik</option>
+          <option value="B3">B3</option>
+        </select>
+        <!-- Filter status -->
+        <select class="filter-select" id="filter-sampah-status">
+          <option value="">Semua Status</option>
+          <option value="belum">Belum Diambil</option>
+          <option value="sudah">Sudah Diambil</option>
+        </select>
+        <!-- Export -->
+        <button class="btn-export" onclick="exportCSV('sampah')"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+        <button class="btn-add" onclick="showModal('modal-sampah')"><i class="fa-solid fa-plus"></i> Tambah</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-hd">
+        <span class="tbl-title">Semua Data Sampah</span>
+        <span class="tbl-count" id="count-sampah">0 item</span>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Jenis</th><th>Berat</th><th>Lokasi</th><th>Bahaya</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="tabel-sampah"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PETUGAS ── -->
+  <section id="page-petugas" class="page">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Data Petugas</h2>
+        <p>Kelola petugas dan zona tugasnya</p>
+      </div>
+      <div class="page-hdr-right">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-petugas" placeholder="Cari nama atau zona..."/>
+        </div>
+        <button class="btn-add" onclick="showModal('modal-petugas')"><i class="fa-solid fa-user-plus"></i> Tambah</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-hd">
+        <span class="tbl-title">Semua Petugas</span>
+        <span class="tbl-count" id="count-petugas">0 petugas</span>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Nama</th><th>Zona Tugas</th><th>Total Diambil</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="tabel-petugas"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── KENDARAAN ── -->
+  <section id="page-kendaraan" class="page">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Armada Kendaraan</h2>
+        <p>Monitor kapasitas dan status kendaraan</p>
+      </div>
+      <div class="page-hdr-right">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-kendaraan" placeholder="Cari plat nomor..."/>
+        </div>
+        <button class="btn-add" onclick="showModal('modal-kendaraan')"><i class="fa-solid fa-plus"></i> Tambah</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-hd">
+        <span class="tbl-title">Semua Kendaraan</span>
+        <span class="tbl-count" id="count-kendaraan">0 unit</span>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Plat Nomor</th><th>Kapasitas</th><th>Muatan</th><th>Kondisi</th><th>Rute</th><th>Aksi</th></tr></thead>
+          <tbody id="tabel-kendaraan"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TPA ── -->
+  <section id="page-tpa" class="page">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Tempat Pembuangan Akhir</h2>
+        <p>Monitor kapasitas dan status TPA</p>
+      </div>
+      <div class="page-hdr-right">
+        <button class="btn-add" onclick="showModal('modal-tpa')"><i class="fa-solid fa-plus"></i> Tambah TPA</button>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-hd">
+        <span class="tbl-title">Semua TPA</span>
+        <span class="tbl-count" id="count-tpa">0 lokasi</span>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Nama TPA</th><th>Kapasitas</th><th>Terisi</th><th>% Terpakai</th><th>Terakhir Dikosongkan</th><th>Aksi</th></tr></thead>
+          <tbody id="tabel-tpa"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LAPORAN ── -->
+  <section id="page-laporan" class="page">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Laporan Harian</h2>
+        <p>Rekap data pengambilan sampah per hari</p>
+      </div>
+      <div class="page-hdr-right">
+        <button class="btn-export" onclick="exportCSV('laporan')"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+        <button class="btn-add" onclick="showModal('modal-laporan')"><i class="fa-solid fa-file-circle-plus"></i> Buat Laporan</button>
+      </div>
+    </div>
+    <div id="laporan-list"></div>
+  </section>
+
+  <!-- ── ANALYTICS ── -->
+  <section id="page-analytics" class="page">
+    <div class="page-hdr">
+      <div class="page-hdr-left">
+        <h2>Statistik Sampah</h2>
+        <p>Statistik real-time pengelolaan sampah 7 hari terakhir</p>
+      </div>
+      <div class="page-hdr-right">
+        <span class="rt-badge" id="rt-badge">
+          <span class="rt-dot"></span> Live
+        </span>
+        <button class="btn-export" onclick="exportCSV('sampah')">
+          <i class="fa-solid fa-file-csv"></i> Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Real-time KPI row -->
+    <div class="rt-kpi-row">
+
+      <div class="rt-kpi rt-kpi-blue">
+        <div class="rt-kpi-icon"><i class="fa-solid fa-calendar-day"></i></div>
+        <div class="rt-kpi-body">
+          <span class="rt-kpi-lbl">Hari Ini</span>
+          <span class="rt-kpi-val" id="rt-today-total">–</span>
+          <span class="rt-kpi-sub">item sampah masuk</span>
+        </div>
+        <div class="rt-kpi-badge-wrap">
+          <div class="rt-kpi-change" id="rt-total-change">
+            <i class="fa-solid fa-minus"></i> vs kemarin
+          </div>
+        </div>
+        <div class="rt-kpi-glow rt-glow-blue"></div>
+      </div>
+
+      <div class="rt-kpi rt-kpi-green">
+        <div class="rt-kpi-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="rt-kpi-body">
+          <span class="rt-kpi-lbl">Sudah Diambil</span>
+          <span class="rt-kpi-val" id="rt-today-diambil">–</span>
+          <span class="rt-kpi-sub">item berhasil diproses</span>
+        </div>
+        <div class="rt-kpi-badge-wrap">
+          <div class="rt-kpi-change" id="rt-diambil-change">
+            <i class="fa-solid fa-minus"></i> vs kemarin
+          </div>
+        </div>
+        <div class="rt-kpi-glow rt-glow-green"></div>
+      </div>
+
+      <div class="rt-kpi rt-kpi-purple">
+        <div class="rt-kpi-icon"><i class="fa-solid fa-weight-hanging"></i></div>
+        <div class="rt-kpi-body">
+          <span class="rt-kpi-lbl">Total Berat</span>
+          <span class="rt-kpi-val" id="rt-today-berat">– <span class="rt-unit">kg</span></span>
+          <span class="rt-kpi-sub">total berat hari ini</span>
+        </div>
+        <div class="rt-kpi-badge-wrap">
+          <div class="rt-kpi-change" id="rt-berat-change">
+            <i class="fa-solid fa-minus"></i> vs kemarin
+          </div>
+        </div>
+        <div class="rt-kpi-glow rt-glow-purple"></div>
+      </div>
+
+      <div class="rt-kpi rt-kpi-red">
+        <div class="rt-kpi-icon"><i class="fa-solid fa-radiation"></i></div>
+        <div class="rt-kpi-body">
+          <span class="rt-kpi-lbl">Sampah B3</span>
+          <span class="rt-kpi-val" id="rt-today-b3">–</span>
+          <span class="rt-kpi-sub">bahan berbahaya</span>
+        </div>
+        <div class="rt-kpi-badge-wrap">
+          <div class="rt-kpi-change err">
+            <i class="fa-solid fa-triangle-exclamation"></i> Perhatian
+          </div>
+        </div>
+        <div class="rt-kpi-glow rt-glow-red"></div>
+      </div>
+
+    </div>
+
+    <!-- Area Chart Card -->
+    <div class="chart-card">
+      <div class="chart-card-hd">
+        <div>
+          <h3 class="chart-card-title">Statistik Sampah Harian</h3>
+          <p class="chart-card-sub">7 hari terakhir — diperbarui setiap 30 detik</p>
+        </div>
+        <div class="chart-legend">
+          <span class="cl-item"><span class="cl-dot" style="background:#3b82f6"></span>Total Masuk</span>
+          <span class="cl-item"><span class="cl-dot" style="background:#10b981"></span>Diambil</span>
+          <span class="cl-item"><span class="cl-dot" style="background:#f97316"></span>Belum</span>
+        </div>
+      </div>
+
+      <!-- Toggle metrik -->
+      <div class="chart-toggle">
+        <button class="ct-btn active" data-metric="total">Total</button>
+        <button class="ct-btn" data-metric="diambil">Diambil</button>
+        <button class="ct-btn" data-metric="belum">Belum</button>
+        <button class="ct-btn" data-metric="berat">Berat (kg)</button>
+      </div>
+
+      <div class="chart-area-wrap">
+        <canvas id="area-chart" class="area-chart"></canvas>
+        <!-- Tooltip -->
+        <div class="chart-tooltip" id="chart-tooltip">
+          <div class="ct-header" id="ct-header">–</div>
+          <div class="ct-rows" id="ct-rows"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary cards + breakdown -->
+    <div class="analytics-row">
+
+      <!-- Summary minggu -->
+      <div class="an-card">
+        <div class="an-card-hd">
+          <i class="fa-solid fa-calendar-week"></i>
+          <span>Ringkasan Minggu Ini</span>
+        </div>
+        <div class="an-summary" id="an-summary">
+          <div class="an-sum-item">
+            <span class="an-sum-lbl">Total Sampah</span>
+            <span class="an-sum-val" id="sum-total">–</span>
+          </div>
+          <div class="an-sum-item">
+            <span class="an-sum-lbl">Total Berat</span>
+            <span class="an-sum-val" id="sum-berat">–</span>
+          </div>
+          <div class="an-sum-item">
+            <span class="an-sum-lbl">Rata-rata/Hari</span>
+            <span class="an-sum-val" id="sum-avg">–</span>
+          </div>
+          <div class="an-sum-item">
+            <span class="an-sum-lbl">Hari Terbanyak</span>
+            <span class="an-sum-val" id="sum-peak">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini bar chart per hari -->
+      <div class="an-card an-card-wide">
+        <div class="an-card-hd">
+          <i class="fa-solid fa-chart-column"></i>
+          <span>Detail Per Hari (7 Hari Terakhir)</span>
+        </div>
+        <div class="an-table-wrap">
+          <table class="an-table">
+            <thead>
+              <tr>
+                <th>Hari</th>
+                <th>Total</th>
+                <th>Diambil</th>
+                <th>Belum</th>
+                <th>Berat (kg)</th>
+                <th>Progres</th>
+              </tr>
+            </thead>
+            <tbody id="an-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <span>SmartWaste v2.0</span>
+    <span class="sep">•</span>
+    <a href="https://instagram.com/lutfi.sw9" target="_blank"><i class="fa-brands fa-instagram"></i> @lutfi.sw9</a>
+    <span class="sep">•</span>
+    <a href="https://tiktok.com/@cyrosss7" target="_blank"><i class="fa-brands fa-tiktok"></i> @cyrosss7</a>
+    <span class="sep">•</span>
+    <a href="https://wa.me/6283853930368" target="_blank"><i class="fa-brands fa-whatsapp"></i> 083853930368</a>
+    <span class="sep">•</span>
+    <span>Dibuat dengan <i class="fa-solid fa-heart" style="color:var(--re);font-size:.7rem"></i> untuk lingkungan</span>
+  </footer>
+
+</main>
+</div>
+
+<!-- ███ MODALS ███ -->
+
+<!-- Modal: Tambah Sampah -->
+<div id="modal-sampah" class="overlay" onclick="closeModalOutside(event,'modal-sampah')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l"><div class="modal-ico"><i class="fa-solid fa-trash-can"></i></div><h3>Tambah Sampah</h3></div>
+        <button class="modal-x" onclick="closeModal('modal-sampah')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="field"><label>Jenis Sampah</label>
+        <select id="inp-sampah-jenis">
+          <option value="Organik">🟢 Organik — sisa makanan, daun, dll</option>
+          <option value="Anorganik">🟡 Anorganik — plastik, kaca, logam</option>
+          <option value="B3">🔴 B3 — Bahan Berbahaya &amp; Beracun</option>
+        </select>
+      </div>
+      <div class="field"><label>Berat (kg)</label><input type="number" id="inp-sampah-berat" min="0.1" step="0.1" placeholder="cth: 2.5"/></div>
+      <div class="field"><label>Lokasi</label><input type="text" id="inp-sampah-lokasi" placeholder="cth: Jl. Merdeka No.1"/></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-sampah')">Batal</button>
+        <button class="btn-save" onclick="tambahSampah()"><i class="fa-solid fa-check"></i> Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Sampah -->
+<div id="modal-edit-sampah" class="overlay" onclick="closeModalOutside(event,'modal-edit-sampah')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l"><div class="modal-ico" style="color:var(--pu)"><i class="fa-solid fa-pen"></i></div><h3>Edit Sampah</h3></div>
+        <button class="modal-x" onclick="closeModal('modal-edit-sampah')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <input type="hidden" id="edit-sampah-id"/>
+      <div class="field"><label>Jenis Sampah</label>
+        <select id="edit-sampah-jenis">
+          <option value="Organik">🟢 Organik</option>
+          <option value="Anorganik">🟡 Anorganik</option>
+          <option value="B3">🔴 B3</option>
+        </select>
+      </div>
+      <div class="field"><label>Berat (kg)</label><input type="number" id="edit-sampah-berat" min="0.1" step="0.1"/></div>
+      <div class="field"><label>Lokasi</label><input type="text" id="edit-sampah-lokasi"/></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-edit-sampah')">Batal</button>
+        <button class="btn-save" onclick="simpanEditSampah()"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Petugas -->
+<div id="modal-petugas" class="overlay" onclick="closeModalOutside(event,'modal-petugas')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l"><div class="modal-ico"><i class="fa-solid fa-user-tie"></i></div><h3>Tambah Petugas</h3></div>
+        <button class="modal-x" onclick="closeModal('modal-petugas')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="field"><label>Nama Lengkap</label><input type="text" id="inp-petugas-nama" placeholder="cth: Budi Santoso"/></div>
+      <div class="field"><label>Zona Tugas</label><input type="text" id="inp-petugas-zona" placeholder="cth: Zona A – Jakarta Pusat"/></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-petugas')">Batal</button>
+        <button class="btn-save" onclick="tambahPetugas()"><i class="fa-solid fa-check"></i> Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Kendaraan -->
+<div id="modal-kendaraan" class="overlay" onclick="closeModalOutside(event,'modal-kendaraan')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l"><div class="modal-ico"><i class="fa-solid fa-truck"></i></div><h3>Tambah Kendaraan</h3></div>
+        <button class="modal-x" onclick="closeModal('modal-kendaraan')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="field"><label>Plat Nomor</label><input type="text" id="inp-kendaraan-plat" placeholder="cth: B 1234 AB"/></div>
+      <div class="field"><label>Kapasitas (kg)</label><input type="number" id="inp-kendaraan-kapasitas" min="1" placeholder="cth: 5000"/></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-kendaraan')">Batal</button>
+        <button class="btn-save" onclick="tambahKendaraan()"><i class="fa-solid fa-check"></i> Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: TPA -->
+<div id="modal-tpa" class="overlay" onclick="closeModalOutside(event,'modal-tpa')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l"><div class="modal-ico"><i class="fa-solid fa-industry"></i></div><h3>Tambah TPA</h3></div>
+        <button class="modal-x" onclick="closeModal('modal-tpa')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="field"><label>Nama TPA</label><input type="text" id="inp-tpa-nama" placeholder="cth: TPA Bantar Gebang"/></div>
+      <div class="field"><label>Kapasitas Maksimal (ton)</label><input type="number" id="inp-tpa-kapasitas" min="1" placeholder="cth: 500"/></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-tpa')">Batal</button>
+        <button class="btn-save" onclick="tambahTPA()"><i class="fa-solid fa-check"></i> Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Terima Sampah ke TPA -->
+<div id="modal-terima-tpa" class="overlay" onclick="closeModalOutside(event,'modal-terima-tpa')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l">
+          <div class="modal-ico" style="color:#0ea5e9;background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.25)">
+            <i class="fa-solid fa-truck-arrow-right"></i>
+          </div>
+          <h3>Terima Sampah ke TPA</h3>
+        </div>
+        <button class="modal-x" onclick="closeModal('modal-terima-tpa')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-note" style="background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.2);color:#0369a1">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="terima-tpa-info">Pilih sampah yang akan diterima ke TPA.</span>
+      </div>
+      <div class="field">
+        <label>Pilih Sampah (yang sudah diambil)</label>
+        <select id="inp-terima-sampah-id">
+          <option value="">-- Memuat data sampah... --</option>
+        </select>
+      </div>
+      <div id="terima-sampah-detail" style="
+        display:none; margin-top:-6px; margin-bottom:14px;
+        padding:10px 12px; border-radius:var(--r2);
+        background:var(--bg2); border:1px solid var(--bd);
+        font-size:.78rem; color:var(--tx2);
+      "></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-terima-tpa')">Batal</button>
+        <button class="btn-save" id="btn-terima-tpa" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)" onclick="simpanTerimaSampah()">
+          <i class="fa-solid fa-truck-arrow-right"></i> Terima Sampah
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Muat Sampah ke Kendaraan -->
+<div id="modal-muat-kendaraan" class="overlay" onclick="closeModalOutside(event,'modal-muat-kendaraan')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l">
+          <div class="modal-ico" style="color:#10b981;background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.25)">
+            <i class="fa-solid fa-truck"></i>
+          </div>
+          <h3>Muat Sampah ke Kendaraan</h3>
+        </div>
+        <button class="modal-x" onclick="closeModal('modal-muat-kendaraan')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-note" style="background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2);color:#065f46">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="muat-kendaraan-info">Pilih sampah yang akan dimuat ke kendaraan.</span>
+      </div>
+      <div class="field">
+        <label>Pilih Sampah (yang belum diambil)</label>
+        <select id="inp-muat-sampah-id">
+          <option value="">-- Memuat data sampah... --</option>
+        </select>
+      </div>
+      <div id="muat-sampah-detail" style="
+        display:none; margin-top:-6px; margin-bottom:14px;
+        padding:10px 12px; border-radius:var(--r2);
+        background:var(--bg2); border:1px solid var(--bd);
+        font-size:.78rem; color:var(--tx2);
+      "></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-muat-kendaraan')">Batal</button>
+        <button class="btn-save" id="btn-muat-kendaraan" style="background:linear-gradient(135deg,#10b981,#059669)" onclick="simpanMuatSampah()">
+          <i class="fa-solid fa-plus"></i> Muat ke Kendaraan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Tugaskan Sampah ke Petugas -->
+<div id="modal-tugaskan-petugas" class="overlay" onclick="closeModalOutside(event,'modal-tugaskan-petugas')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l">
+          <div class="modal-ico" style="color:#8b5cf6;background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.25)">
+            <i class="fa-solid fa-person-digging"></i>
+          </div>
+          <h3>Tugaskan Ambil Sampah</h3>
+        </div>
+        <button class="modal-x" onclick="closeModal('modal-tugaskan-petugas')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-note" style="background:rgba(139,92,246,.08);border-color:rgba(139,92,246,.2);color:#5b21b6">
+        <i class="fa-solid fa-circle-info"></i>
+        <span id="tugaskan-petugas-info">Pilih sampah yang akan ditugaskan ke petugas ini.</span>
+      </div>
+      <div class="field">
+        <label>Pilih Sampah (yang belum diambil)</label>
+        <select id="inp-tugaskan-sampah-id">
+          <option value="">-- Memuat data sampah... --</option>
+        </select>
+      </div>
+      <div id="tugaskan-sampah-detail" style="
+        display:none; margin-top:-6px; margin-bottom:14px;
+        padding:10px 12px; border-radius:var(--r2);
+        background:var(--bg2); border:1px solid var(--bd);
+        font-size:.78rem; color:var(--tx2);
+      "></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-tugaskan-petugas')">Batal</button>
+        <button class="btn-save" id="btn-tugaskan-petugas"
+          style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)"
+          onclick="simpanTugaskanSampah()">
+          <i class="fa-solid fa-person-digging"></i> Tugaskan & Ambil
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Edit Petugas -->
+<div id="modal-edit-petugas" class="overlay" onclick="closeModalOutside(event,'modal-edit-petugas')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l">
+          <div class="modal-ico" style="color:#8b5cf6;background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.25)">
+            <i class="fa-solid fa-pen"></i>
+          </div>
+          <h3>Edit Data Petugas</h3>
+        </div>
+        <button class="modal-x" onclick="closeModal('modal-edit-petugas')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <input type="hidden" id="edit-petugas-id"/>
+      <div class="field">
+        <label>Nama Lengkap</label>
+        <input type="text" id="edit-petugas-nama" placeholder="Nama petugas"/>
+      </div>
+      <div class="field">
+        <label>Zona Tugas</label>
+        <input type="text" id="edit-petugas-zona" placeholder="cth: Zona A – Jakarta Pusat"/>
+      </div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-edit-petugas')">Batal</button>
+        <button class="btn-save" onclick="simpanEditPetugas()">
+          <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Laporan -->
+<div id="modal-laporan" class="overlay" onclick="closeModalOutside(event,'modal-laporan')">
+  <div class="modal">
+    <div class="modal-stripe"></div>
+    <div class="modal-inner">
+      <div class="modal-hd">
+        <div class="modal-hd-l"><div class="modal-ico"><i class="fa-solid fa-file-lines"></i></div><h3>Buat Laporan Harian</h3></div>
+        <button class="modal-x" onclick="closeModal('modal-laporan')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-note"><i class="fa-solid fa-circle-info"></i>Laporan dibuat otomatis dari semua sampah yang sudah diambil.</div>
+      <div class="field"><label>Tanggal Laporan</label><input type="text" id="inp-laporan-tanggal" placeholder="cth: 15 Agustus 2026"/></div>
+      <div class="modal-ft">
+        <button class="btn-cancel" onclick="closeModal('modal-laporan')">Batal</button>
+        <button class="btn-save" onclick="buatLaporan()"><i class="fa-solid fa-file-circle-check"></i> Buat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast">
+  <div class="tst-ico success" id="toast-icon"><i class="fa-solid fa-circle-check"></i></div>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- Bottom Navigation (mobile only) -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bn-item active" data-page="dashboard">
+    <i class="fa-solid fa-chart-pie"></i>
+    <span>Dashboard</span>
+  </button>
+  <button class="bn-item" data-page="sampah">
+    <i class="fa-solid fa-trash-can"></i>
+    <span>Sampah</span>
+  </button>
+  <button class="bn-item" data-page="petugas">
+    <i class="fa-solid fa-users"></i>
+    <span>Petugas</span>
+  </button>
+  <button class="bn-item" data-page="kendaraan">
+    <i class="fa-solid fa-truck"></i>
+    <span>Armada</span>
+  </button>
+  <button class="bn-item" data-page="tpa">
+    <i class="fa-solid fa-industry"></i>
+    <span>TPA</span>
+  </button>
+  <button class="bn-item" data-page="laporan">
+    <i class="fa-solid fa-file-lines"></i>
+    <span>Laporan</span>
+  </button>
+  <button class="bn-item" data-page="analytics">
+    <i class="fa-solid fa-chart-area"></i>
+    <span>Statistik</span>
+  </button>
+</nav>
+
+<!-- Scroll to top button -->
+<button class="scroll-top" id="scroll-top" title="Kembali ke atas" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<script src="js/app.js"></script>
+</body>
+</html>
