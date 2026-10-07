@@ -306,6 +306,9 @@ body::before {
   background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
   color: #6ee7b7; font-size: .67rem; font-weight: 700;
 }
+.db-hero-chip.status-checking { color: #bae6fd; }
+.db-hero-chip.status-online { color: #6ee7b7; }
+.db-hero-chip.status-offline { color: #fecaca; border-color: rgba(254,202,202,.35); }
 .db-hero h2 { font-size: 1.45rem; font-weight: 900; color: #fff; letter-spacing: -.6px; line-height: 1.25; margin-bottom: 7px; }
 .db-hero h2 em { font-style: normal; background: linear-gradient(90deg, #6ee7b7, #7dd3fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .db-hero p { font-size: .79rem; color: rgba(255,255,255,.62); max-width: 340px; line-height: 1.68; }
@@ -441,6 +444,9 @@ body::before {
 .ms-left { display: flex; align-items: center; gap: 8px; font-size: .76rem; font-weight: 600; color: var(--tx2); }
 .ms-left i { font-size: .72rem; width: 14px; text-align: center; }
 .ms-val { font-size: .82rem; font-weight: 800; color: var(--tx1); }
+.ms-val.status-checking { color: var(--tx3); }
+.ms-val.status-online { color: var(--gr1); }
+.ms-val.status-offline { color: var(--re); }
 
 /* ════════════════════════════════
    INFO PANELS

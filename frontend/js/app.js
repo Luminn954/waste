@@ -3,7 +3,14 @@
 //  Fitur: Search, Edit, Export CSV, Notifikasi, Chart, Dark Mode
 // ============================================================
 
-const API = "http://localhost:8090";
+const DEFAULT_LOCAL_API = "http://localhost:8090";
+const configuredApi = document.querySelector('meta[name="smartwaste-api-url"]')?.content.trim();
+const localHosts = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
+const API = (configuredApi || (
+  location.protocol === "file:" || localHosts.has(location.hostname)
+    ? DEFAULT_LOCAL_API
+    : location.origin
+)).replace(/\/+$/, "");
 
 // Cache data untuk search/filter
 let _sampahData    = [];
@@ -356,14 +363,62 @@ function syncBottomNav(page) {
 // ============================================================
 //  API HELPER
 // ============================================================
+function updateSystemStatus(apiOnline, databaseOnline) {
+  const setStatus = (id, label, state) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = label;
+    el.classList.remove("status-checking", "status-online", "status-offline");
+    el.classList.add(`status-${state}`);
+  };
+
+  const apiState = apiOnline === null ? "checking" : apiOnline ? "online" : "offline";
+  const databaseState = databaseOnline === null ? "checking" : databaseOnline ? "online" : "offline";
+  setStatus("api-status", apiState === "checking" ? "Memeriksa..." : apiState === "online" ? "Online" : "Offline", apiState);
+  setStatus("database-status", databaseState === "checking" ? "Memeriksa..." : databaseState === "online" ? "Terhubung" : "Offline", databaseState);
+
+  const hero = document.getElementById("system-status");
+  const icon = document.getElementById("system-status-icon");
+  const text = document.getElementById("system-status-text");
+  if (!hero || !icon || !text) return;
+
+  const heroState = apiOnline === false || databaseOnline === false
+    ? "offline"
+    : apiOnline === true && databaseOnline === true
+      ? "online"
+      : "checking";
+  const heroCopy = {
+    checking: ["Memeriksa koneksi...", "fa-spinner fa-spin"],
+    online: ["Sistem berjalan normal", "fa-circle-check"],
+    offline: [apiOnline === false ? "Backend tidak aktif" : "Database tidak terhubung", "fa-circle-exclamation"],
+  }[heroState];
+
+  hero.classList.remove("status-checking", "status-online", "status-offline");
+  hero.classList.add(`status-${heroState}`);
+  text.textContent = heroCopy[0];
+  icon.className = `fa-solid ${heroCopy[1]}`;
+}
+
 async function api(method, path, body = null) {
   const opts = { method, headers: { "Content-Type": "application/json" } };
   if (body) opts.body = JSON.stringify(body);
   let res;
   try { res = await fetch(API + path, opts); }
-  catch { throw new Error("Tidak bisa terhubung ke server. Jalankan backend terlebih dahulu."); }
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || "Terjadi kesalahan");
+  catch {
+    updateSystemStatus(false, false);
+    throw new Error("Tidak bisa terhubung ke server. Jalankan backend terlebih dahulu.");
+  }
+
+  let data = {};
+  try { data = await res.json(); } catch {}
+  if (!res.ok) {
+    if (path === "/") updateSystemStatus(false, false);
+    if (path === "/dashboard") updateSystemStatus(true, false);
+    throw new Error(data.detail || "Terjadi kesalahan");
+  }
+
+  if (path === "/") updateSystemStatus(true, null);
+  if (path === "/dashboard") updateSystemStatus(true, true);
   return data;
 }
 

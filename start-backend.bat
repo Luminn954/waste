@@ -1,4 +1,13 @@
 @echo off
+setlocal
 title SmartWaste Backend
-cd /d "c:\Users\lutfi sakhi winardi\Documents\ChatGPT\Smart Waste\backend"
-python -m uvicorn main:app --port 8090
+pushd "%~dp0backend"
+if errorlevel 1 (
+  echo Folder backend tidak ditemukan: "%~dp0backend"
+  pause
+  exit /b 1
+)
+python -m uvicorn main:app --host 127.0.0.1 --port 8090
+set "EXIT_CODE=%ERRORLEVEL%"
+popd
+exit /b %EXIT_CODE%

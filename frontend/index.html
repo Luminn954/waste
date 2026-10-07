@@ -6,6 +6,7 @@
   <title>SmartWaste — Sistem Manajemen Sampah</title>
   <meta name="description" content="SmartWaste - Aplikasi manajemen sampah modern. Pantau sampah, petugas, kendaraan, dan TPA secara real-time."/>
   <meta name="theme-color" content="#10b981"/>
+  <meta name="smartwaste-api-url" content=""/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
@@ -153,9 +154,12 @@
 
     <div class="db-hero">
       <div class="db-hero-text">
-        <div class="db-hero-chip"><i class="fa-solid fa-circle-check"></i> Sistem Berjalan Normal</div>
+        <div class="db-hero-chip status-checking" id="system-status" role="status" aria-live="polite">
+          <i class="fa-solid fa-spinner fa-spin" id="system-status-icon" aria-hidden="true"></i>
+          <span id="system-status-text">Memeriksa koneksi...</span>
+        </div>
         <h2>Selamat Datang,<br/><em>SmartWaste</em> Dashboard</h2>
-        <p>Pantau aktivitas pengelolaan sampah secara real-time. Data selalu sinkron dengan backend.</p>
+        <p>Pantau aktivitas pengelolaan sampah dan tindak lanjut utama dalam satu dashboard.</p>
         <div class="db-hero-tags">
           <span><i class="fa-solid fa-bolt"></i> Real-time</span>
           <span><i class="fa-solid fa-shield-halved"></i> Aman</span>
@@ -268,8 +272,8 @@
         </div>
         <div class="chart-box-body">
           <div class="mini-stats">
-            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-server" style="color:var(--gr1)"></i> Backend API</div><span class="ms-val" style="color:var(--gr1)">Online</span></div>
-            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-database" style="color:var(--te1)"></i> Database</div><span class="ms-val" style="color:var(--te1)">Terhubung</span></div>
+            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-server" style="color:var(--gr1)"></i> Backend API</div><span class="ms-val status-checking" id="api-status" role="status" aria-live="polite">Memeriksa...</span></div>
+            <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-database" style="color:var(--te1)"></i> Database</div><span class="ms-val status-checking" id="database-status" role="status" aria-live="polite">Menunggu API...</span></div>
             <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-trash-can" style="color:var(--tx2)"></i> Sampah Diambil</div><span class="ms-val" id="pct-sampah">0%</span></div>
             <div class="ms-row"><div class="ms-left"><i class="fa-solid fa-users" style="color:var(--tx2)"></i> Petugas Aktif</div><span class="ms-val" id="pct-petugas-d">0%</span></div>
           </div>
