@@ -1,35 +1,27 @@
 # SmartWaste v2.0
 
-Dashboard pengelolaan sampah dengan frontend HTML/CSS/JavaScript dan backend FastAPI.
+Dashboard pengelolaan sampah dengan frontend HTML/CSS/JavaScript dan backend PHP. API PHP membaca database SQLite yang sama di `backend/smart_waste.db`, sehingga data yang tersimpan sebelumnya tetap dipakai.
 
 ## Menjalankan secara lokal
 
-1. Pasang dependensi backend:
+Persyaratan: PHP 8.1+ dengan ekstensi `pdo_sqlite`. XAMPP sudah menyertakan PHP; pastikan ekstensi `pdo_sqlite` aktif.
 
-   ```powershell
-   py -m pip install -r backend/requirements.txt
-   ```
+Di Windows, jalankan `start-backend.bat`, lalu buka [http://127.0.0.1:8090](http://127.0.0.1:8090). Server PHP menyajikan tampilan frontend dan API dari satu alamat.
 
-2. Jalankan backend di port `8090`:
+Atau jalankan manual dari folder repositori:
 
-   ```powershell
-   py -m uvicorn main:app --reload --host 127.0.0.1 --port 8090 --app-dir backend
-   ```
+```powershell
+php -S 127.0.0.1:8090 router.php
+```
 
-   Di Windows, kamu juga bisa menjalankan `start-backend.bat`.
+## Hosting
 
-3. Buka terminal lain dan sajikan frontend:
-
-   ```powershell
-   py -m http.server 8080 --directory frontend
-   ```
-
-4. Buka `http://localhost:8080`.
-
-Frontend lokal otomatis memakai backend `http://localhost:8090`. Pada hosting, isi nilai `content` di tag `meta[name="smartwaste-api-url"]` pada `frontend/index.html` dengan alamat backend yang dipakai. Jika backend tersedia pada origin yang sama dengan frontend, biarkan nilainya kosong.
+Hosting harus mendukung PHP 8.1+, `pdo_sqlite`, dan penulisan ke folder `backend/` agar database SQLite dapat digunakan. GitHub Pages hanya menyajikan file statis, jadi backend PHP perlu ditempatkan di hosting PHP. Jika frontend dan API berada di origin yang sama, biarkan `meta[name="smartwaste-api-url"]` kosong di `frontend/index.html`. Jika API ada di host berbeda, isi `content` pada meta tersebut dengan URL backend.
 
 ## Struktur
 
-- `frontend/` — halaman dashboard dan aset browser
-- `backend/` — API FastAPI dan database SQLite
-- `start-backend.bat` — pintasan untuk menjalankan API dari folder repositori
+- `frontend/` — dashboard SmartWaste v2.0 dan aset browser
+- `backend/index.php` — endpoint API PHP untuk sampah, petugas, kendaraan, TPA, laporan, dan statistik
+- `backend/smart_waste.db` — database SQLite bersama yang menyimpan data aplikasi
+- `router.php` — melayani frontend dan meneruskan endpoint API ke PHP
+- `start-backend.bat` — menjalankan aplikasi lokal melalui PHP

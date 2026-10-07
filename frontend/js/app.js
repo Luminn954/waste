@@ -412,12 +412,12 @@ async function api(method, path, body = null) {
   let data = {};
   try { data = await res.json(); } catch {}
   if (!res.ok) {
-    if (path === "/") updateSystemStatus(false, false);
+    if (path === "/health") updateSystemStatus(false, false);
     if (path === "/dashboard") updateSystemStatus(true, false);
     throw new Error(data.detail || "Terjadi kesalahan");
   }
 
-  if (path === "/") updateSystemStatus(true, null);
+  if (path === "/health") updateSystemStatus(true, null);
   if (path === "/dashboard") updateSystemStatus(true, true);
   return data;
 }
@@ -1861,7 +1861,7 @@ async function loadQuickAction() {
   }, { passive: true });
 
   try {
-    await api("GET", "/");
+    await api("GET", "/health");
     loadDashboard();
     cekNotifDot();
     // Auto-refresh dashboard setiap 30 detik
@@ -1875,7 +1875,7 @@ async function loadQuickAction() {
     const b = document.createElement("div");
     b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(90deg,#dc2626,#ef4444);color:#fff;padding:10px 18px;display:flex;align-items:center;gap:10px;font-family:'Outfit',sans-serif;font-size:.79rem;font-weight:600;box-shadow:0 4px 20px rgba(239,68,68,.3)";
     b.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>
-      <span>Backend tidak aktif — jalankan: <code style="background:rgba(255,255,255,.2);padding:2px 7px;border-radius:4px">cd backend &amp;&amp; python -m uvicorn main:app --reload</code></span>
+      <span>Backend tidak aktif — jalankan <code style="background:rgba(255,255,255,.2);padding:2px 7px;border-radius:4px">start-backend.bat</code> dengan PHP dan pdo_sqlite aktif.</span>
       <button onclick="this.parentElement.remove()" style="margin-left:auto;background:none;border:none;color:#fff;cursor:pointer">✕</button>`;
     document.body.appendChild(b);
   }
